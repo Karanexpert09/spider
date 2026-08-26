@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>spider official</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d0a;
+    --pitch: #7fbf3f;
+    --pitch-dark: #4f7a26;
+    --amber: #ff8c1a;
+    --white: #f2f5ee;
+    --muted: #8a9483;
+    --line: rgba(242,245,238,0.09);
+    --card: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(127,191,63,0.12), transparent),
+      var(--bg);
+    color:var(--white);
+    font-family:'Oswald', sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  .grid-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.10;
+    background-image:
+      linear-gradient(rgba(127,191,63,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127,191,63,0.5) 1px, transparent 1px);
+    background-size:60px 60px;
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px clamp(20px,5vw,60px);
+    background:rgba(10,13,10,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:0.5px; font-size:19px; }
+  .brand-mark{
+    width:34px; height:34px; border-radius:8px;
+    background:linear-gradient(145deg, var(--pitch), var(--pitch-dark));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono'; font-weight:700; color:#0a0d0a; font-size:16px;
+  }
+.brand-mark img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--pitch); color:#0a0d0a;
+    padding:10px 20px; border-radius:8px;
+    font-weight:600; font-size:14px; text-decoration:none;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .nav-cta:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(127,191,63,0.25); }
+  .nav-cta svg{width:16px; height:16px;}
+
+  .hero{
+    position:relative; z-index:1;
+    padding:clamp(50px,8vw,90px) clamp(20px,6vw,60px) 40px;
+    max-width:1100px; margin:0 auto; text-align:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px;
+    color:var(--pitch); text-transform:uppercase;
+    border:1px solid var(--pitch-dark); padding:6px 14px; border-radius:999px;
+    background:rgba(127,191,63,0.06);
+  }
+  h1{
+    font-size:clamp(40px,7vw,72px); font-weight:700; letter-spacing:-1px;
+    margin:22px 0 14px; line-height:1.02;
+  }
+  h1 span{color:var(--pitch);}
+  .sub{
+    color:var(--muted); font-size:clamp(15px,2vw,18px);
+    max-width:560px; margin:0 auto 34px; font-weight:400;
+  }
+
+  .cta-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:46px;}
+  .btn-primary{
+    display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(135deg, var(--pitch), var(--pitch-dark));
+    color:#0a0d0a; font-weight:700; font-size:16px;
+    padding:16px 30px; border-radius:10px; text-decoration:none;
+    box-shadow:0 10px 30px rgba(127,191,63,0.25);
+    transition:transform 0.15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-3px) scale(1.02); }
+  .btn-primary svg{width:20px; height:20px;}
+  .btn-ghost{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--line); padding:16px 26px; border-radius:10px;
+    text-decoration:none; font-weight:500; font-size:15px; color:var(--muted);
+    transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-ghost:hover{ border-color:var(--pitch); color:var(--white); }
+
+  /* STAT STRIP - static credibility numbers, not "live" */
+  .statline{
+    position:relative; z-index:1;
+    max-width:900px; margin:0 auto 60px;
+    padding:clamp(20px,4vw,32px);
+    background:var(--card); border:1px solid var(--line); border-radius:18px;
+  }
+  .sl-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .sl-cell{ text-align:center; padding:14px 8px; }
+  .sl-num{ font-family:'JetBrains Mono'; font-weight:700; font-size:clamp(24px,3.5vw,32px); color:var(--pitch); }
+  .sl-label{ margin-top:6px; font-size:11px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; font-family:'JetBrains Mono'; }
+  @media (max-width:640px){ .sl-grid{ grid-template-columns:1fr; gap:22px;} }
+
+  .features{
+    position:relative; z-index:1;
+    max-width:1100px; margin:0 auto; padding:20px clamp(20px,6vw,60px) 70px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+  }
+  @media (max-width:800px){ .features{ grid-template-columns:1fr; } }
+  .feat{ padding:26px; border-radius:14px; border:1px solid var(--line); background:var(--card); }
+  .feat-icon{
+    width:40px; height:40px; border-radius:9px;
+    background:rgba(127,191,63,0.1); border:1px solid rgba(127,191,63,0.25);
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px; color:var(--pitch);
+  }
+  .feat h3{ font-size:17px; margin-bottom:6px; font-weight:600;}
+  .feat p{ color:var(--muted); font-size:14px; font-weight:400;}
+
+  .mid-cta{ position:relative; z-index:1; max-width:1100px; margin:0 auto 70px; padding:0 clamp(20px,6vw,60px); }
+  .mid-cta-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    padding:clamp(24px,4vw,38px); border-radius:18px;
+    background:linear-gradient(120deg, rgba(127,191,63,0.12), rgba(255,140,26,0.06));
+    border:1px solid var(--pitch-dark);
+  }
+  .mid-cta-inner h2{ font-size:clamp(20px,3vw,26px); font-weight:600; }
+  .mid-cta-inner p{ color:var(--muted); font-size:14px; margin-top:4px;}
+
+  footer{
+    position:relative; z-index:1; text-align:center; padding:30px 20px 100px;
+    color:var(--muted); font-size:13px; border-top:1px solid var(--line);
+  }
+  footer a{ color:var(--pitch); text-decoration:none; }
+
+  .float-join{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:100;
+    display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(135deg, var(--pitch), var(--pitch-dark));
+    color:#0a0d0a; font-weight:700; font-size:15px;
+    padding:14px 26px; border-radius:999px; text-decoration:none;
+    box-shadow:0 14px 34px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform:translateX(-50%) translateY(0); }
+    50%{ transform:translateX(-50%) translateY(-6px); }
+  }
+  .float-join svg{ width:18px; height:18px; }
+
+  @media (prefers-reduced-motion: reduce){ .float-join{ animation:none; } }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<header>
+  <div class="brand">
+   <div class="brand-mark">
+  <img src="logo.png">
+</div>    SPIDER OFFICIAL
+  </div>
+  <a href="https://t.me/+71IW3F0xtW4zZDJl" target="_blank" class="nav-cta">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5 2.7 11.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.9.9.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.8l3.3-15.5c.3-1.3-.5-1.9-1.9-1.4Z"/></svg>
+    Join Telegram
+  </a>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">MATCH REPORT & MARKET INSIGHTS</span>
+  <h1>Market samajho,<br><span>sahi decision</span> lo.</h1>
+  <p class="sub">Spider Official ke Telegram channel par milega match report dekho samajh — clear aur seedhi bhasha mein. Abhi join karo.</p>
+
+  <div class="cta-row">
+    <a href="https://t.me/+71IW3F0xtW4zZDJl" target="_blank" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5 2.7 11.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.9.9.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.8l3.3-15.5c.3-1.3-.5-1.9-1.9-1.4Z"/></svg>
+      Join Telegram Channel
+    </a>
+    <a href="#why" class="btn-ghost">Kyun join karein ↓</a>
+  </div>
+
+  <div class="statline" id="why">
+    <div class="sl-grid">
+      <div class="sl-cell">
+        <div class="sl-num">100%</div>
+        <div class="sl-label">Free to Join</div>
+      </div>
+      <div class="sl-cell">
+        <div class="sl-num">Daily</div>
+        <div class="sl-label">Market Updates</div>
+      </div>
+      <div class="sl-cell">
+        <div class="sl-num">High Accuracy</div>
+        <div class="sl-label">+ Telegram</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feat">
+    <div class="feat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+    </div>
+    <h3>Simple explanations</h3>
+    <p>Cricket Trading concepts easy Hinglish mein — bina jargon ke, seedha kaam ki baat.</p>
+  </div>
+  <div class="feat">
+    <div class="feat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <h3>Regular updates</h3>
+    <p>daily match updates channel par time se milte rahenge.</p>
+  </div>
+  <div class="feat">
+    <div class="feat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h3>Free & instant</h3>
+    <p>Bina kisi jhanjhat ke join karo — sab kuch Telegram par milega.</p>
+  </div>
+</section>
+
+<div class="mid-cta">
+  <div class="mid-cta-inner">
+    <div>
+      <h2>CRICKET se earning abhi start karo</h2>
+      <p>Telegram join karo aur updates seedha apne phone par paao.</p>
+    </div>
+    <a href="https://t.me/+71IW3F0xtW4zZDJl" target="_blank" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5 2.7 11.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.9.9.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.8l3.3-15.5c.3-1.3-.5-1.9-1.9-1.4Z"/></svg>
+      Join Now
+    </a>
+  </div>
+</div>
+
+<footer>
+  © Spider official · Cricket updates on <a href="https://t.me/+71IW3F0xtW4zZDJl" target="_blank">Telegram</a>
+</footer>
+
+<a href="https://t.me/+71IW3F0xtW4zZDJlL" target="_blank" class="float-join">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5 2.7 11.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.9.9.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.8l3.3-15.5c.3-1.3-.5-1.9-1.9-1.4Z"/></svg>
+  Join Telegram Channel
+</a>
+
+</body>
+</html>
